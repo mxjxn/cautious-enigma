@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  fid       Int      @unique
+  username  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  games Game[]
+}
+
+model Game {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  status    GameStatus @default(ACTIVE)
+  turn      Int        @default(1)
+  phase     GamePhase  @default(PLAYER)
+  score     Int        @default(0)
+
+  mapData   Json
+  unitsData Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  actions   GameAction[]
+}
+
+model GameAction {
+  id        String   @id @default(cuid())
+  gameId    String
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  type      String
+  data      Json
+
+  createdAt DateTime @default(now())
+}
+
+enum GameStatus {
+  ACTIVE
+  VICTORY
+  DEFEAT
+}
+
+enum GamePhase {
+  PLAYER
+  ENEMY
+  ENDED
+}

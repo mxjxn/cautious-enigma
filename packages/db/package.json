@@ -1,0 +1,22 @@
+{
+  "name": "@farcaster-tactical/db",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "prisma generate --watch",
+    "build": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "clean": "rm -rf node_modules .turbo"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.1"
+  },
+  "devDependencies": {
+    "prisma": "^5.7.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5"
+  }
+}
