@@ -1,246 +1,169 @@
-# Farcaster Tactical Game
+# Farcaster Tactical Game - Turn-Based Miniapp
 
-A turn-based tactical strategy game built as a Farcaster miniapp, inspired by X-COM with top-down pixel art graphics.
+A turn-based tactical game (inspired by X-COM) built as a Farcaster miniapp using pixel art graphics. Players command units on a grid-based battlefield in strategic turn-based combat.
 
-## 🎮 Overview
+## 🎮 Features
 
-This project is a multiplayer turn-based tactical game where players command a squad of units in strategic combat. The game features:
+- **Turn-Based Tactical Combat**: X-COM style gameplay with action points and tactical decisions
+- **Farcaster Integration**: Built using @farcaster/frame-sdk for native Farcaster experience
+- **Pixel Art Graphics**: Retro-style visual representation
+- **Real-time Multiplayer**: Socket.IO for live game updates
+- **Persistent Game State**: PostgreSQL database with Prisma ORM
+- **Smart Contract Ready**: Foundry setup for future on-chain features
 
-- **Turn-based combat** with action points system
-- **Multiple unit types**: Soldiers, Snipers, Medics, and Heavy units
-- **Tactical gameplay**: Cover system, positioning, and range management
-- **Pixel art aesthetics**: Retro-style top-down graphics
-- **Farcaster integration**: Social features and player authentication
-- **Smart contract support**: NFT achievements and rewards (coming soon)
+## 📁 Project Structure
 
-## 📦 Project Structure
-
-This is a **Turborepo** monorepo containing:
+This is a turborepo monorepo containing:
 
 ```
-.
 ├── apps/
-│   ├── frontend/        # Next.js app with Farcaster Frame SDK
-│   ├── backend/         # Express API server
-│   └── contracts/       # Foundry smart contracts (placeholder)
+│   ├── frontend/          # Next.js frontend with Farcaster SDK
+│   ├── backend/           # Express API server with Socket.IO
+│   └── database/          # Prisma schema and migrations
 ├── packages/
-│   ├── game-engine/     # Core game logic and mechanics
-│   └── db/              # Prisma database layer
-└── turbo.json           # Turborepo configuration
+│   └── contracts/         # Foundry smart contracts (placeholder)
+├── turbo.json            # Turborepo configuration
+└── package.json          # Root workspace configuration
 ```
-
-### Apps
-
-- **frontend**: Next.js 14 application with React, TypeScript, and Tailwind CSS
-- **backend**: Express.js REST API with Neynar SDK integration
-- **contracts**: Foundry project for smart contracts (to be implemented)
-
-### Packages
-
-- **game-engine**: Shared game logic, turn-based mechanics, and AI
-- **db**: Prisma ORM with PostgreSQL schema
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
-- pnpm 8+
 - PostgreSQL (for database)
-- Foundry (optional, for smart contracts)
+- Foundry (optional, for contracts)
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/mxjxn/cautious-enigma.git
 cd cautious-enigma
 ```
 
 2. Install dependencies:
 ```bash
-pnpm install
+npm install
 ```
 
 3. Set up environment variables:
-
-**Backend** (`apps/backend/.env`):
 ```bash
+# Frontend
+cp apps/frontend/.env.example apps/frontend/.env.local
+
+# Backend
 cp apps/backend/.env.example apps/backend/.env
-# Edit with your values
-```
 
-**Frontend** (`apps/frontend/.env`):
-```bash
-cp apps/frontend/.env.example apps/frontend/.env
-# Edit with your values
-```
-
-**Database** (`packages/db/.env`):
-```bash
-cp packages/db/.env.example packages/db/.env
-# Edit with your database URL
+# Database
+cp apps/database/.env.example apps/database/.env
 ```
 
 4. Set up the database:
 ```bash
-cd packages/db
-pnpm db:push
-pnpm db:seed
+cd apps/database
+npm run db:push
+npm run db:seed
 ```
 
 ### Development
 
 Run all apps in development mode:
 ```bash
-pnpm dev
+npm run dev
 ```
 
 Or run individual apps:
 ```bash
-# Frontend only
-cd apps/frontend
-pnpm dev
+# Frontend only (http://localhost:3000)
+cd apps/frontend && npm run dev
 
-# Backend only
-cd apps/backend
-pnpm dev
+# Backend only (http://localhost:3001)
+cd apps/backend && npm run dev
 ```
 
-### Build
+### Building
 
-Build all packages and apps:
+Build all apps:
 ```bash
-pnpm build
+npm run build
 ```
 
 ## 🎯 Game Mechanics
 
-### Unit Types
+### Units
+- Each unit has HP, action points, movement range, and attack range
+- Units can move or attack during their turn
+- Action points limit the number of actions per turn
 
-- **Soldier**: Balanced unit with decent stats
-  - Health: 100, Damage: 20, Range: 5, Accuracy: 75%
+### Turn System
+- Alternates between player and enemy teams
+- Each team can move all their units during their turn
+- Turn ends when player chooses to end it
 
-- **Sniper**: Long-range high-damage unit
-  - Health: 70, Damage: 40, Range: 10, Accuracy: 90%
+### Combat
+- Grid-based tactical movement
+- Range-based attacks
+- Health management
 
-- **Medic**: Support unit with healing capabilities
-  - Health: 80, Damage: 10, Range: 4, Accuracy: 60%
-
-- **Heavy**: Tank unit with high health and defense
-  - Health: 150, Damage: 30, Range: 4, Accuracy: 65%
-
-### Action Points
-
-Each unit has 2 action points per turn that can be used for:
-- **Movement**: 1 AP per tile
-- **Attacking**: Consumes all remaining AP
-- **Abilities**: Varies by ability (coming soon)
-
-### Cover System
-
-- **Half Cover**: Provides defense bonus against attacks
-- **Full Cover**: Maximum defense bonus
-- Position strategically to maximize survivability
-
-## 🔧 Technology Stack
+## 🛠️ Tech Stack
 
 ### Frontend
 - Next.js 14
 - React 18
 - TypeScript
+- @farcaster/frame-sdk
 - Tailwind CSS
-- Farcaster Frame SDK
-- Canvas API for pixel art rendering
 
 ### Backend
-- Node.js
-- Express.js
-- TypeScript
+- Express
+- Socket.IO
 - Neynar SDK
-- Zod for validation
+- TypeScript
 
 ### Database
 - PostgreSQL
 - Prisma ORM
 
-### Smart Contracts (Planned)
-- Solidity
+### Contracts
 - Foundry
-- Achievement NFTs
-- Reward distribution
+- Solidity 0.8.23
 
-## 📚 API Documentation
+## 📦 Workspace Packages
 
-### Game Endpoints
+### apps/frontend
+Next.js application with Farcaster miniapp integration. Renders the game board and handles user interactions.
 
-- `POST /api/game/new` - Create a new game
-- `GET /api/game/:gameId` - Get game state
-- `POST /api/game/action` - Perform a game action
-- `GET /api/game/player/:fid` - List player's games
+### apps/backend
+Express server providing REST API and WebSocket connections for real-time game state synchronization.
 
-### Auth Endpoints
+### apps/database
+Prisma schema defining the database structure for users, games, units, and moves.
 
-- `POST /api/auth/verify` - Verify Farcaster signature
-- `GET /api/auth/user/:fid` - Get user profile
+### packages/contracts
+Foundry project for future smart contract integration (NFTs, rewards, tournaments).
 
-## 🎨 Pixel Art Rendering
+## 🔮 Future Enhancements
 
-The game uses HTML5 Canvas with pixel-perfect rendering:
-- 32x32 pixel tiles
-- 20x15 tile grid (640x480 effective resolution)
-- Crisp pixel art with `image-rendering: pixelated`
-
-## 🔐 Farcaster Integration
-
-The app integrates with Farcaster using:
-- **@farcaster/frame-sdk**: Frame context and user authentication
-- **@neynar/nodejs-sdk**: User profiles and social features
-
-## 🎮 Future Features
-
-### Phase 1 (Current)
-- [x] Basic game mechanics
-- [x] Turn-based combat
-- [x] Simple AI
-- [x] Frontend UI
-- [x] Backend API
-
-### Phase 2 (Planned)
-- [ ] Multiplayer matchmaking
-- [ ] Real-time multiplayer
-- [ ] Enhanced AI with difficulty levels
-- [ ] More unit types and abilities
-- [ ] Campaign mode
-
-### Phase 3 (Future)
-- [ ] Smart contract integration
-- [ ] Achievement NFTs
-- [ ] Reward tokens
-- [ ] Tournaments and leaderboards
-- [ ] Custom maps and mod support
-
-## 🧪 Testing
-
-Run tests:
-```bash
-pnpm test
-```
-
-For smart contracts:
-```bash
-cd apps/contracts
-forge test
-```
-
-## 📝 License
-
-MIT
+- [ ] AI opponent
+- [ ] Different unit types with special abilities
+- [ ] Multiple maps and terrain types
+- [ ] Power-ups and items
+- [ ] Tournament mode
+- [ ] NFT integration for units and items
+- [ ] On-chain leaderboard
+- [ ] Replay system
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📧 Contact
+## 📄 License
 
-For questions or support, please open an issue on GitHub.
+ISC
+
+## 🔗 Links
+
+- [Farcaster Documentation](https://docs.farcaster.xyz/)
+- [Neynar API](https://docs.neynar.com/)
+- [Turborepo](https://turbo.build/repo)

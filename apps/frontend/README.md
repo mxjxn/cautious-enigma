@@ -1,41 +1,74 @@
-# Frontend - Farcaster Tactical Game
+# Frontend App
 
-Next.js frontend application for the Farcaster Tactical Game miniapp.
+Next.js application serving the Farcaster miniapp with tactical game interface.
 
-## Features
-
-- Farcaster Frame SDK integration
-- Pixel art game canvas with HTML5 Canvas API
-- Real-time game state management
-- Responsive UI with Tailwind CSS
-- Turn-based action system
-
-## Development
-
-```bash
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
-
-## Environment Variables
-
-Create a `.env.local` file:
+## Structure
 
 ```
-NEXT_PUBLIC_API_URL=http://localhost:3001
-NEXT_PUBLIC_NEYNAR_CLIENT_ID=your_neynar_client_id
+src/
+├── app/                  # Next.js App Router
+│   ├── layout.tsx       # Root layout
+│   ├── page.tsx         # Main game page
+│   └── globals.css      # Global styles
+├── components/          # React components
+│   ├── GameBoard.tsx    # Main game board with grid
+│   └── GameControls.tsx # Control buttons
+└── lib/                 # Utilities and logic
+    ├── types.ts         # TypeScript types
+    └── gameEngine.ts    # Game logic functions
 ```
 
 ## Key Components
 
-- **GameCanvas**: Main game rendering with canvas
-- **GameUI**: Sidebar with unit info and controls
-- **page.tsx**: Main game page with Farcaster SDK initialization
+### GameBoard
+Renders the tactical grid, handles unit selection and movement visualization.
 
-## Building
+### GameControls
+Provides buttons for game actions (end turn, new game).
 
+### Game Engine
+Core game logic including:
+- Unit initialization
+- Movement validation
+- Attack calculations
+- Distance calculations
+
+## Running
+
+Development:
 ```bash
-pnpm build
-pnpm start
+npm run dev
 ```
+
+Build:
+```bash
+npm run build
+```
+
+Production:
+```bash
+npm run start
+```
+
+## Environment Variables
+
+Create `.env.local`:
+```
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+## Farcaster Integration
+
+The app uses @farcaster/frame-sdk to:
+- Initialize the miniapp context
+- Signal readiness to the Farcaster client
+- Access user information
+- Handle frame interactions
+
+## Features
+
+- Responsive grid-based game board
+- Unit selection and highlighting
+- Real-time game state updates
+- Turn-based gameplay interface
+- Pixel art style UI
