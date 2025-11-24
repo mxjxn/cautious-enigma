@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Farcaster Tactical Game',
+  title: 'Tactical Commander',
   description: 'Turn-based tactical game on Farcaster',
 };
 

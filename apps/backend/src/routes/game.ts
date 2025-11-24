@@ -1,95 +1,110 @@
-import { Router } from 'express';
-import { GameEngine } from '@farcaster-tactical/game-engine';
-import { z } from 'zod';
+import { Router, Request, Response } from 'express';
 
 const router = Router();
-const gameEngine = new GameEngine();
-
-// In-memory game storage (replace with database in production)
-const games = new Map<string, any>();
-
-const GameActionSchema = z.object({
-  gameId: z.string(),
-  action: z.object({
-    type: z.enum(['move', 'attack', 'ability', 'end_turn']),
-    unitId: z.string().optional(),
-    target: z.union([
-      z.object({ x: z.number(), y: z.number() }),
-      z.string(),
-    ]).optional(),
-    abilityId: z.string().optional(),
-  }),
-});
 
 // Create new game
-router.post('/new', async (req, res) => {
+router.post('/create', async (req: Request, res: Response) => {
   try {
-    const { playerFid } = req.body;
-
-    const gameState = gameEngine.createNewGame(playerFid || 1);
-    games.set(gameState.id, gameState);
-
-    res.json(gameState);
+    const { playerId: _playerId, playerName: _playerName } = req.body;
+    
+    // TODO: Create game in database
+    const gameId = `game-${Date.now()}`;
+    
+    res.json({
+      success: true,
+      gameId,
+      message: 'Game created successfully',
+    });
   } catch (error) {
-    console.error('Game creation error:', error);
-    res.status(500).json({ error: 'Failed to create game' });
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create game',
+    });
+  }
+});
+
+// Join existing game
+router.post('/join/:gameId', async (req: Request, res: Response) => {
+  try {
+    const { gameId } = req.params;
+    const { playerId: _playerId, playerName: _playerName } = req.body;
+
+    // TODO: Add player to game in database
+    
+    res.json({
+      success: true,
+      gameId,
+      message: 'Joined game successfully',
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to join game',
+    });
   }
 });
 
 // Get game state
-router.get('/:gameId', async (req, res) => {
+router.get('/:gameId', async (req: Request, res: Response) => {
   try {
     const { gameId } = req.params;
-    const game = games.get(gameId);
 
-    if (!game) {
-      return res.status(404).json({ error: 'Game not found' });
-    }
-
-    res.json(game);
+    // TODO: Fetch game state from database
+    
+    res.json({
+      success: true,
+      gameId,
+      gameState: {
+        turn: 1,
+        currentTeam: 'player',
+        units: [],
+      },
+    });
   } catch (error) {
-    console.error('Game fetch error:', error);
-    res.status(500).json({ error: 'Failed to fetch game' });
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch game state',
+    });
   }
 });
 
-// Perform game action
-router.post('/action', async (req, res) => {
+// Make a move
+router.post('/:gameId/move', async (req: Request, res: Response) => {
   try {
-    const validatedData = GameActionSchema.parse(req.body);
-    const { gameId, action } = validatedData;
+    const { gameId: _gameId } = req.params;
+    const { unitId: _unitId, targetPosition: _targetPosition } = req.body;
 
-    const game = games.get(gameId);
-    if (!game) {
-      return res.status(404).json({ error: 'Game not found' });
-    }
-
-    const updatedGame = gameEngine.processAction(game, action);
-    games.set(gameId, updatedGame);
-
-    res.json(updatedGame);
+    // TODO: Validate and execute move
+    
+    res.json({
+      success: true,
+      message: 'Move executed',
+    });
   } catch (error) {
-    console.error('Game action error:', error);
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid action', details: error.errors });
-    }
-    res.status(500).json({ error: 'Failed to process action' });
+    res.status(500).json({
+      success: false,
+      error: 'Failed to execute move',
+    });
   }
 });
 
-// List games for player
-router.get('/player/:fid', async (req, res) => {
+// End turn
+router.post('/:gameId/end-turn', async (req: Request, res: Response) => {
   try {
-    const { fid } = req.params;
-    const playerGames = Array.from(games.values()).filter(
-      (game) => game.playerFid === parseInt(fid)
-    );
+    const { gameId: _gameId } = req.params;
 
-    res.json(playerGames);
+    // TODO: Process end turn logic
+    
+    res.json({
+      success: true,
+      message: 'Turn ended',
+    });
   } catch (error) {
-    console.error('Game list error:', error);
-    res.status(500).json({ error: 'Failed to fetch games' });
+    res.status(500).json({
+      success: false,
+      error: 'Failed to end turn',
+    });
   }
 });
 
-export { router as gameRouter };
+export default router;

@@ -1,26 +1,27 @@
 {
   "name": "farcaster-tactical-game",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "Turn-based tactical game Farcaster miniapp",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
     "dev": "turbo run dev",
+    "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "prettier": "^3.1.0",
-    "turbo": "^1.11.0"
+    "turbo": "^1.11.0",
+    "typescript": "^5.3.3"
   },
-  "packageManager": "pnpm@8.10.5",
   "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
-  }
+    "node": ">=18.0.0"
+  },
+  "packageManager": "npm@10.8.2"
 }
