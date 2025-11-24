@@ -1,15 +1,28 @@
 import { Server, Socket } from 'socket.io';
 
+interface GameState {
+  id: string;
+  players: string[];
+  turn: number;
+  currentTeam: string;
+}
+
+interface GameAction {
+  gameId: string;
+  action: string;
+  payload: Record<string, unknown>;
+}
+
 export class GameService {
   private io: Server;
-  private games: Map<string, any>;
+  private games: Map<string, GameState>;
 
   constructor(io: Server) {
     this.io = io;
     this.games = new Map();
   }
 
-  handleGameAction(socket: Socket, data: any) {
+  handleGameAction(socket: Socket, data: GameAction) {
     const { gameId, action, payload } = data;
 
     console.log(`Game action: ${action} for game ${gameId}`);
@@ -29,7 +42,7 @@ export class GameService {
     }
   }
 
-  private handleMove(gameId: string, payload: any) {
+  private handleMove(gameId: string, payload: Record<string, unknown>) {
     // TODO: Validate and execute move
     console.log('Move:', payload);
     
@@ -40,7 +53,7 @@ export class GameService {
     });
   }
 
-  private handleAttack(gameId: string, payload: any) {
+  private handleAttack(gameId: string, payload: Record<string, unknown>) {
     // TODO: Validate and execute attack
     console.log('Attack:', payload);
     

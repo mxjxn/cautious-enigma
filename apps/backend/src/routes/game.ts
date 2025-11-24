@@ -5,7 +5,7 @@ const router = Router();
 // Create new game
 router.post('/create', async (req: Request, res: Response) => {
   try {
-    const { playerId, playerName } = req.body;
+    const { playerId: _playerId, playerName: _playerName } = req.body;
     
     // TODO: Create game in database
     const gameId = `game-${Date.now()}`;
@@ -27,7 +27,7 @@ router.post('/create', async (req: Request, res: Response) => {
 router.post('/join/:gameId', async (req: Request, res: Response) => {
   try {
     const { gameId } = req.params;
-    const { playerId, playerName } = req.body;
+    const { playerId: _playerId, playerName: _playerName } = req.body;
 
     // TODO: Add player to game in database
     
@@ -71,8 +71,8 @@ router.get('/:gameId', async (req: Request, res: Response) => {
 // Make a move
 router.post('/:gameId/move', async (req: Request, res: Response) => {
   try {
-    const { gameId } = req.params;
-    const { unitId, targetPosition } = req.body;
+    const { gameId: _gameId } = req.params;
+    const { unitId: _unitId, targetPosition: _targetPosition } = req.body;
 
     // TODO: Validate and execute move
     
@@ -91,7 +91,7 @@ router.post('/:gameId/move', async (req: Request, res: Response) => {
 // End turn
 router.post('/:gameId/end-turn', async (req: Request, res: Response) => {
   try {
-    const { gameId } = req.params;
+    const { gameId: _gameId } = req.params;
 
     // TODO: Process end turn logic
     
